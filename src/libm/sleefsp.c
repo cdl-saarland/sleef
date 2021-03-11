@@ -2434,3 +2434,33 @@ int main(int argc, char **argv) {
   //printf("%g, %g\n", (double)r.x, (double)r.y);
 }
 #endif
+
+
+/// More regular function names for 'fast' functions and more of them.
+EXPORT CONST float xsinf_u3500(float d) {
+  return xfastsinf_u3500(d);
+}
+
+EXPORT CONST float xcosf_u3500(float d) {
+  return xfastcosf_u3500(d);
+}
+
+EXPORT CONST float xpowf_u3500(float x, float y) {
+  return xfastpowf_u3500(x,y);
+}
+
+EXPORT CONST float xexpf_u3500(float y) {
+  const float E = 2.718281828459045f;
+  const float x = E;
+  // xfastpowf_u35000 with (x == E inlined)
+  float result = expk3f(logk3f(fabsfk(x)) * y);
+
+  int yisint = (y == (int)y) || (fabsfk(y) >= (float)(INT64_C(1) << 24));
+  int yisodd = (1 & (int)y) != 0 && yisint && fabsfk(y) < (float)(INT64_C(1) << 24);
+
+  result *= (x < 0 && yisodd) ? -1 : 1;
+  if (x == 0) result = 0;
+  if (y == 0) result = 1;
+
+  return result;
+}
