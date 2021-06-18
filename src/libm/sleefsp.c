@@ -423,7 +423,7 @@ typedef struct {
   int32_t i;
 } dfi_t;
 
-static CONST fi_t rempisubf(float x) {
+static INLINE CONST fi_t rempisubf(float x) {
   fi_t ret;
   float fr = x - (float)(INT64_C(1) << 10) * (int32_t)(x * (1.0f / (INT64_C(1) << 10)));
   ret.i = ((7 & ((x > 0 ? 4 : 3) + (int32_t)(fr * 8))) - 3) >> 1;
@@ -435,7 +435,7 @@ static CONST fi_t rempisubf(float x) {
   return ret;
 }
 
-static CONST dfi_t rempif(float a) {
+static INLINE CONST dfi_t rempif(float a) {
   Sleef_float2 x, y;
   fi_t di;
   int ex = ilogb2kf(a) - 25, q = ex > (90 - 25) ? -64 : 0;
